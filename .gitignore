@@ -1,0 +1,55 @@
+# Direktori hasil kompilasi
+# /bin/
+/obj/
+/build/
+
+# File hasil kompilasi
+*.o
+*.obj
+*.exe
+*.out
+*.app
+*.dll
+*.so
+*.dylib
+
+# Hapus tanda # jika Anda ingin menyimpan beberapa gambar test di repo
+# !/test/images/*.jpg
+# !/test/images/*.png
+
+# File cache dan build intermediates
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile.in
+*.make
+*.cmake
+.cache/
+
+# File IDE dan editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vcxproj*
+
+# File sistem operasi
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# File log dan debug
+*.log
+*.tlog
+*.dmp
+*.stackdump
