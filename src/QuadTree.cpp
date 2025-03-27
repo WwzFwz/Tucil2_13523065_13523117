@@ -108,9 +108,15 @@ vector<vector<RGB>> QuadTree::getCurrentStateImage() const {
 // Membagi node dengan pendekatan divide and conquer
 void QuadTree::subdivide(Node* node, int depth) {
     if (!node) return;
+    static int nodeProcessedCount = 0;
     
     // Hitung error untuk region saat ini
     double error = calculateError(node->region, node->avgColor);
+
+    if (error > 1000000 || error < 0) { // Deteksi nilai ekstrem   //DEBUGGING
+        std::cerr << "Warning: Extreme error value " << error 
+                  << " for method " << errorMetric << std::endl;
+    }
     
     // Tentukan apakah perlu subdivisi
     bool shouldSubdivide = error > threshold;
@@ -122,6 +128,7 @@ void QuadTree::subdivide(Node* node, int depth) {
     }
     
     if (shouldSubdivide) {
+        nodeProcessedCount++;
         // Ubah status node menjadi internal (bukan leaf)
         node->isLeaf = false;
         
@@ -144,7 +151,7 @@ void QuadTree::subdivide(Node* node, int depth) {
         node->bottomRight = make_unique<Node>(bottomRightRegion, bottomRightColor);
         
         // Panggil callback untuk visualisasi jika tersedia
-        if (compressionCallback) {
+        if (nodeProcessedCount % 100 == 0 && compressionCallback) {
             compressionCallback(getCurrentStateImage());
         }
         
