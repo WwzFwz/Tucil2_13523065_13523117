@@ -89,6 +89,9 @@ public:
      * @return Gambar yang merepresentasikan state tree saat ini
      */
     vector<vector<RGB>> getCurrentStateImage() const;
+
+    void setCompressionRegionCallback(const std::function<void(const Block&, const RGB&)>& cb);
+
     
 private:
     /**
@@ -173,6 +176,8 @@ private:
      * @param Node saat ini
      */
     void buildCompressedImage(vector<vector<RGB>>&, const Node*) const;
+    std::function<void(const Block&, const RGB&)> compressionRegionCallback;
+
 };
 
 #endif 
