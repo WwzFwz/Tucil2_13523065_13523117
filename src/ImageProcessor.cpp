@@ -5,10 +5,18 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
+#include <cmath>
+#include <windows.h>
+#undef RGB
+
 
 // External STB image library
 #include "lib/stb_image.h"
 #include "lib/stb_image_write.h"
+#include "lib/gif.h"
+
+
+#define GIF_IMPL
 
 // Constructor
 ImageProcessor::ImageProcessor(const string& _inputPath, const string& _outputPath,
@@ -275,7 +283,7 @@ double ImageProcessor::findThresholdForTargetCompression() {
         double achievedCompression = testTree.getCompressionPercentage();
         
         // Hitung perbedaan dengan target
-        double difference = abs(achievedCompression - targetCompressionPercentage);
+        double difference = std::fabs(achievedCompression - targetCompressionPercentage);
         
         std::cout << "  Iteration " << (iterations+1) << ": threshold = " << currentThreshold 
                   << ", achieved = " << (achievedCompression * 100) << "%, diff = " 
@@ -316,78 +324,90 @@ double ImageProcessor::findThresholdForTargetCompression() {
 
 // Membuat GIF visualisasi proses kompresi
 bool ImageProcessor::generateCompressionGif() {
-    // Implementasi ini akan memerlukan library tambahan seperti gif.h atau integrasi dengan
-    // tool eksternal seperti ImageMagick. Berikut contoh implementasi sederhana yang menulis
-    // frame-frame PPM yang bisa dikonversi ke GIF menggunakan tool eksternal.
-    
-    // Kita perlu mengumpulkan frame-frame terlebih dahulu
-    // Rebuild tree dengan callback untuk mengumpulkan frame
-    vector<vector<vector<RGB>>> frames;
-    
-    auto captureFrame = [&frames](const vector<vector<RGB>>& frame) {
-        frames.push_back(frame);
-    };
-    
-    // Buat tree baru dengan callback dan build ulang
-    QuadTree treeCopy(originalImage, minBlockSize, threshold, errorMetricType);
-    treeCopy.setCompressionCallback(captureFrame);
-    treeCopy.buildTree();
-    
-    // Tambahkan frame terakhir jika masih kosong
-    if (frames.empty()) {
-        frames.push_back(compressedImage);
-    }
-    
-    // Buat direktori output jika belum ada
-    string directory = gifPath.substr(0, gifPath.find_last_of("/\\"));
-    if (!directory.empty()) {
-        if (!Utils::createDirectoryIfNotExists(directory)) {
-            std::cerr << "Failed to create directory for GIF: " << directory << std::endl;
+    try {
+        // Buat direktori output jika belum ada
+        std::string directory = gifPath.substr(0, gifPath.find_last_of("/\\"));
+        if (!directory.empty()) {
+            Utils::createDirectoryIfNotExists(directory);
+        }
+
+        // Inisialisasi writer
+        GifWriter gifWriter;
+        if (!GifBegin(&gifWriter, gifPath.c_str(), width, height, 10)) {
+            std::cerr << "Failed to initialize GIF writer\n";
             return false;
         }
-    }
-    
-    // Tulis semua frame ke file PPM (format gambar sederhana)
-    std::cout << "Writing " << frames.size() << " frames..." << std::endl;
-    
-    for (size_t i = 0; i < frames.size(); i++) {
-        // Buat nama file untuk frame ini
-        std::ostringstream framePath;
-        framePath << directory << "/frame_" << std::setw(4) << std::setfill('0') << i << ".ppm";
-        std::string frameFilePath = framePath.str();
-        
-        // Tulis frame sebagai PPM
-        std::ofstream ppmFile(frameFilePath, std::ios::binary);
-        if (!ppmFile) {
-            std::cerr << "Failed to create frame file: " << frameFilePath << std::endl;
-            continue;
-        }
-        
-        // Header PPM
-        ppmFile << "P6\n" << width << " " << height << "\n255\n";
-        
-        // Data frame
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                const RGB& pixel = frames[i][y][x];
-                ppmFile.put(pixel.getRed());
-                ppmFile.put(pixel.getGreen());
-                ppmFile.put(pixel.getBlue());
+
+        std::cout << "Generating GIF (streaming)...\n";
+
+        // Buffer gambar yang dimodifikasi secara bertahap
+        std::vector<std::vector<RGB>> gifBuffer = originalImage;
+
+        // Counter frame
+        int frameCounter = 0;
+        const int frameInterval = 100;  // lebih sering, biar kelihatan animasinya
+
+        // Callback yang diberikan ke QuadTree
+        auto callback = [&](const Block& region, const RGB& avgColor) {
+            // Modifikasi region sesuai warna kompresi
+            for (int y = region.getY(); y < region.getY() + region.getHeight(); ++y) {
+                for (int x = region.getX(); x < region.getX() + region.getWidth(); ++x) {
+                    gifBuffer[y][x] = avgColor;
+                }
+            }
+
+            // Setiap interval, kita tulis frame ke GIF
+            if (frameCounter % frameInterval == 0) {
+                std::vector<uint8_t> frameData(width * height * 4);
+                for (int y = 0; y < height; ++y) {
+                    for (int x = 0; x < width; ++x) {
+                        int idx = (y * width + x) * 4;
+                        const RGB& pixel = gifBuffer[y][x];
+                        frameData[idx + 0] = pixel.getRed();
+                        frameData[idx + 1] = pixel.getGreen();
+                        frameData[idx + 2] = pixel.getBlue();
+                        frameData[idx + 3] = 255;
+                    }
+                }
+                std::cout << "Callback triggered at frameCounter = " << frameCounter << std::endl;
+                GifWriteFrame(&gifWriter, frameData.data(), width, height, 10);
+                std::cout << "Frame " << (frameCounter / frameInterval) << " written\n";
+            }
+
+            frameCounter++;
+
+            Sleep(1);
+
+        };
+
+        // Bangun Quadtree baru dengan callback streaming
+        QuadTree treeCopy(originalImage, minBlockSize, threshold, errorMetricType);
+        treeCopy.setCompressionRegionCallback(callback);  // Pastikan ini sudah kamu buat
+        treeCopy.buildTree();
+
+        // Tambahkan frame terakhir (hasil akhir)
+        std::vector<uint8_t> finalFrame(width * height * 4);
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                int idx = (y * width + x) * 4;
+                const RGB& pixel = compressedImage[y][x];
+                finalFrame[idx + 0] = pixel.getRed();
+                finalFrame[idx + 1] = pixel.getGreen();
+                finalFrame[idx + 2] = pixel.getBlue();
+                finalFrame[idx + 3] = 255;
             }
         }
-        
-        ppmFile.close();
+        GifWriteFrame(&gifWriter, finalFrame.data(), width, height, 10);
+        std::cout << "Final frame written\n";
+
+        GifEnd(&gifWriter);
+        std::cout << "GIF created successfully at " << gifPath << std::endl;
+        return true;
     }
-    
-    // Di sini Anda bisa menambahkan kode untuk memanggil tool eksternal seperti ImageMagick
-    // untuk mengonversi frame-frame PPM menjadi GIF animasi.
-    // Contoh command line:
-    // convert -delay 20 -loop 0 directory/frame_*.ppm output.gif
-    
-    std::cout << "GIF frames have been saved to " << directory << std::endl;
-    std::cout << "You can convert them to GIF using external tools like ImageMagick." << std::endl;
-    
-    return true;
+    catch (const std::exception& e) {
+        std::cerr << "Compression GIF generation error: " << e.what() << std::endl;
+        return false;
+    }
 }
 
 // Menghitung ukuran file gambar

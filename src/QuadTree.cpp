@@ -5,9 +5,10 @@
 
 // Constructor
 QuadTree::QuadTree(const vector<vector<RGB>>& _image, int _minBlockSize, double _threshold, 
-                  ErrorMetricType _errorMetric)
+    ErrorMetricType _errorMetric)
     : image(_image), minBlockSize(_minBlockSize), threshold(_threshold), 
-      errorMetric(_errorMetric), nodeCount(0), maxDepth(0), root(nullptr) {
+    errorMetric(_errorMetric), nodeCount(0), maxDepth(0), root(nullptr) {
+        this->maxDepth = maxDepth;
 }
 
 // Membangun QuadTree dengan pendekatan divide and conquer
@@ -151,9 +152,9 @@ void QuadTree::subdivide(Node* node, int depth) {
         node->bottomRight = make_unique<Node>(bottomRightRegion, bottomRightColor);
         
         // Panggil callback untuk visualisasi jika tersedia
-        if (nodeProcessedCount % 100 == 0 && compressionCallback) {
-            compressionCallback(getCurrentStateImage());
-        }
+        if (compressionRegionCallback && nodeProcessedCount % 100 == 0) {
+            compressionRegionCallback(node->region, node->avgColor);
+        }        
         
         // Rekursif subdivisi child nodes
         subdivide(node->topLeft.get(), depth + 1);
@@ -306,4 +307,8 @@ void QuadTree::buildCompressedImage(vector<vector<RGB>>& result, const Node* nod
         buildCompressedImage(result, node->bottomLeft.get());
         buildCompressedImage(result, node->bottomRight.get());
     }
+}
+
+void QuadTree::setCompressionRegionCallback(const std::function<void(const Block&, const RGB&)>& cb) {
+    this->compressionRegionCallback = cb;
 }
