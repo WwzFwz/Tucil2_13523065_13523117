@@ -368,7 +368,7 @@ bool ImageProcessor::generateCompressionGif() {
         
         // Data frame
         for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+            for (int x = 0; x < width; x++) {   
                 const RGB& pixel = frames[i][y][x];
                 ppmFile.put(pixel.getRed());
                 ppmFile.put(pixel.getGreen());
