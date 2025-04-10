@@ -114,17 +114,21 @@ void QuadTree::subdivide(Node* node, int depth) {
     // Hitung error untuk region saat ini
     double error = calculateError(node->region, node->avgColor);
 
-    if (error > 1000000 || error < 0) { // Deteksi nilai ekstrem   //DEBUGGING
-        std::cerr << "Warning: Extreme error value " << error 
-                  << " for method " << errorMetric << std::endl;
-    }
+    // if (error > 1000000 || error < 0) { // Deteksi nilai ekstrem   //DEBUGGING
+    //     std::cerr << "Warning: Extreme error value " << error 
+    //               << " for method " << errorMetric << std::endl;
+    // }
     
     // Tentukan apakah perlu subdivisi
     bool shouldSubdivide = error > threshold;
-    int subBlockSize = node->region.getWidth() / 2; // Ukuran sub-blok
+    int subBlockWidth = node->region.getWidth() / 2;
+    int subBlockHeight = node->region.getHeight() / 2;
+    
+    // Calculate area of potential sub-blocks
+    int subBlockArea = subBlockWidth * subBlockHeight;
     
     // Periksa ukuran minimum blok
-    if (subBlockSize < minBlockSize) {
+    if (subBlockArea < minBlockSize) {
         shouldSubdivide = false;
     }
     

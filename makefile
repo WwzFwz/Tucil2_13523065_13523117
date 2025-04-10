@@ -1,5 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -Wextra -I./src/include -I./lib
+LDFLAGS = -lstdc++fs
 SRC_DIR = src
 BIN_DIR = bin
 
@@ -14,7 +15,8 @@ all:
 	$(SRC_DIR)/QuadTree.cpp \
 	$(SRC_DIR)/ErrorMetrics.cpp \
 	$(SRC_DIR)/ImageProcessor.cpp \
-	$(SRC_DIR)/Utils.cpp
+	$(SRC_DIR)/Utils.cpp \
+	$(LDFLAGS)
 
 clean:
 	rm -f $(BIN_DIR)/quadtree_compression

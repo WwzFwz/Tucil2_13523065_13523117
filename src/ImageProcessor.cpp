@@ -1,3 +1,7 @@
+
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#define GIF_IMPL  
 #include "ImageProcessor.hpp"
 #include "Utils.hpp"
 #include <chrono>
@@ -10,7 +14,6 @@
 #undef RGB
 
 
-// External STB image library
 #include "lib/stb_image.h"
 #include "lib/stb_image_write.h"
 #include "lib/gif.h"
