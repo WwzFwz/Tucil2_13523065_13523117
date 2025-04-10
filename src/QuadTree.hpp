@@ -122,45 +122,7 @@ private:
      * @param Kedalaman saat ini
      * @return Kedalaman maksimum
      */
-    double calculateVariance(const Block&, const RGB&) const;
-    
-    /**
-     * @brief Menghitung error menggunakan metode Mean Absolute Deviation
-     * @param Region yang akan dihitung
-     * @param Warna rata-rata region
-     * @return Nilai MAD
-     */
-    double calculateMAD(const Block&, const RGB&) const;
-    
-    /**
-     * @brief Menghitung error menggunakan metode Max Pixel Difference
-     * @param Region yang akan dihitung
-     * @param Warna rata-rata region
-     * @return Nilai perbedaan maksimum
-     */
-    double calculateMaxDifference(const Block&, const RGB&) const;
-    
-    /**
-     * @brief Menghitung error menggunakan metode Entropy
-     * @param Region yang akan dihitung
-     * @return Nilai entropy
-     */
-    double calculateEntropy(const Block&) const;
-    
-    /**
-     * @brief Menghitung error menggunakan metode SSIM (bonus)
-     * @param Region yang akan dihitung
-     * @param Warna rata-rata region
-     * @return Nilai SSIM
-     */
-    double calculateSSIM(const Block&, const RGB&) const;
-    
-    /**
-     * @brief Menghitung kedalaman maksimum dari pohon
-     * @param Node saat ini
-     * @param Kedalaman saat ini
-     * @return Kedalaman maksimum
-     */
+ 
     int calculateMaxDepth(const Node*, int) const;
     
     /**

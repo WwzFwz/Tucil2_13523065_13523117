@@ -203,45 +203,20 @@ RGB QuadTree::calculateAverageColor(const Block& region) const {
 double QuadTree::calculateError(const Block& region, const RGB& avgColor) const {
     switch (errorMetric) {
         case VARIANCE:
-            return calculateVariance(region, avgColor);
+            return ErrorMetrics::calculateVariance(this->image, region, avgColor);
         case MEAN_ABSOLUTE_DEVIATION:
-            return calculateMAD(region, avgColor);
+            return ErrorMetrics::calculateMAD(this->image, region, avgColor);
         case MAX_PIXEL_DIFFERENCE:
-            return calculateMaxDifference(region, avgColor);
+            return ErrorMetrics::calculateMaxDifference(this->image, region, avgColor);
         case ENTROPY:
-            return calculateEntropy(region);
+            return ErrorMetrics::calculateEntropy(this->image, region);
         case SSIM:
-            return calculateSSIM(region, avgColor);
+            return ErrorMetrics::calculateSSIM(this->image, region, avgColor);
         default:
-            return calculateVariance(region, avgColor);
+            return ErrorMetrics::calculateVariance(this->image, region, avgColor);
     }
 }
 
-
-// Menghitung error menggunakan metode variance
-double QuadTree::calculateVariance(const Block& region, const RGB& avgColor) const {
-    return ErrorMetrics::calculateVariance(this->image, region, avgColor);
-}
-
-// Menghitung error menggunakan metode Mean Absolute Deviation
-double QuadTree::calculateMAD(const Block& region, const RGB& avgColor) const {
-    return ErrorMetrics::calculateMAD(this->image, region, avgColor);
-}
-
-// Menghitung error menggunakan metode Max Pixel Difference
-double QuadTree::calculateMaxDifference(const Block& region, const RGB& avgColor) const {
-    return ErrorMetrics::calculateMaxDifference(this->image, region, avgColor);
-}
-
-// Menghitung error menggunakan metode Entropy
-double QuadTree::calculateEntropy(const Block& region) const {
-    return ErrorMetrics::calculateEntropy(this->image, region);
-}
-
-// Menghitung error menggunakan metode SSIM
-double QuadTree::calculateSSIM(const Block& region, const RGB& avgColor) const {
-    return ErrorMetrics::calculateSSIM(this->image, region, avgColor);
-}
 // Menghitung kedalaman maksimum dari pohon
 int QuadTree::calculateMaxDepth(const Node* node, int currentDepth) const {
     if (!node) {
