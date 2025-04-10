@@ -3,9 +3,129 @@
 #include <iostream>
 #include <fstream>
 #include <experimental/filesystem>
+#include <string>
+#include <sstream>
 
 namespace fs = std::experimental::filesystem;
 
+void Utils::getThresholdLimits(QuadTree::ErrorMetricType method, double& minThreshold, double& maxThreshold) {
+    switch(method) {
+        case QuadTree::VARIANCE:
+            minThreshold = 0.0;
+            maxThreshold = 65025.0;
+            break;
+        case QuadTree::MEAN_ABSOLUTE_DEVIATION:
+        case QuadTree::MAX_PIXEL_DIFFERENCE:
+            minThreshold = 0.0;
+            maxThreshold = 255.0;
+            break;
+        case QuadTree::ENTROPY:
+            minThreshold = 0.0;
+            maxThreshold = 8.0;
+            break;
+        case QuadTree::SSIM:
+            minThreshold = 0.0;
+            maxThreshold = 1.0;
+            break;
+        default:
+            minThreshold = 0.0;
+            maxThreshold = 255.0;
+    }
+}
+std::string Utils::getDefaultGifPath(const std::string& inputPath, 
+    QuadTree::ErrorMetricType method, 
+    double threshold, 
+    int minBlockSize,
+    double percentageCompression) {
+    // Extract directory, filename, and extension
+    size_t lastSlash = inputPath.find_last_of("/\\");
+    std::string directory = (lastSlash != std::string::npos) ? 
+    inputPath.substr(0, lastSlash + 1) : "";
+
+    std::string filename = (lastSlash != std::string::npos) ? 
+    inputPath.substr(lastSlash + 1) : inputPath;
+
+    size_t lastDot = filename.find_last_of(".");
+    std::string baseName = (lastDot != std::string::npos) ? 
+    filename.substr(0, lastDot) : filename;
+
+    // Create gif directory (could be a subdirectory of output)
+    std::string gifDir;
+
+    // If directory has "input" in the path, replace with "output/gif"
+    size_t inputPos = directory.find("input");
+    if (inputPos != std::string::npos) {
+    gifDir = directory.substr(0, inputPos) + "output/gif/";
+    } else {
+    // Otherwise, just use a subfolder "output/gif" under the current directory
+    gifDir = directory + "output/gif/";
+    }
+
+    // Ensure gif directory exists
+    createDirectoryIfNotExists(gifDir);
+
+    // Build new filename with .gif extension
+    std::stringstream ss;
+    if (percentageCompression > 0.0) {
+    ss << baseName << "_percentage_" << percentageCompression;
+    } else {
+    ss << baseName << "_" << static_cast<int>(method) << "_" 
+    << threshold << "_" << minBlockSize;
+    }
+    ss << ".gif";
+
+    return gifDir + ss.str();
+}
+
+std::string Utils::getDefaultOutputPath(const std::string& inputPath, 
+    QuadTree::ErrorMetricType method, 
+    double threshold, 
+    int minBlockSize,
+    double percentageCompression) {
+    // Extract directory, filename, and extension
+    size_t lastSlash = inputPath.find_last_of("/\\");
+    std::string directory = (lastSlash != std::string::npos) ? 
+    inputPath.substr(0, lastSlash + 1) : "";
+
+    std::string filename = (lastSlash != std::string::npos) ? 
+    inputPath.substr(lastSlash + 1) : inputPath;
+
+    size_t lastDot = filename.find_last_of(".");
+    std::string baseName = (lastDot != std::string::npos) ? 
+    filename.substr(0, lastDot) : filename;
+
+    std::string extension = (lastDot != std::string::npos) ? 
+    filename.substr(lastDot) : "";
+
+    // Create path to output directory
+    // Replace "input" with "output" in the directory path if possible
+    std::string outputDirectory = directory;
+    size_t inputPos = outputDirectory.find("input");
+    if (inputPos != std::string::npos) {
+    outputDirectory.replace(inputPos, 5, "output");
+    } else {
+    // If "input" not found, try to create an "output" directory at the same level
+    size_t lastDirSlash = outputDirectory.substr(0, outputDirectory.length() - 1).find_last_of("/\\");
+    if (lastDirSlash != std::string::npos) {
+    outputDirectory = outputDirectory.substr(0, lastDirSlash + 1) + "output/";
+    } else {
+    // If all else fails, just use the same directory
+    outputDirectory = directory;
+    }
+    }
+
+    // Build new filename
+    std::stringstream ss;
+    if (percentageCompression > 0.0) {
+    ss << baseName << "_percentage_" << percentageCompression;
+    } else {
+    ss << baseName << "_" << static_cast<int>(method) << "_" 
+    << threshold << "_" << minBlockSize;
+    }
+    ss << extension;
+
+    return outputDirectory + ss.str();
+}
 bool Utils::fileExists(const std::string& filePath) {
     std::ifstream file(filePath);
     return file.good();
@@ -28,18 +148,7 @@ std::string Utils::getFileExtension(const std::string& filePath) {
     return "";
 }
 
-bool Utils::isAbsolutePath(const std::string& path) {
-    return true;
-}
 
-std::string Utils::toAbsolutePath(const std::string& path) {
-    fs::path p(path);
-    if (p.is_absolute()) {
-        return path; 
-    }
-
-    return fs::absolute(p).string(); 
-}
 
 std::string Utils::errorMetricToString(QuadTree::ErrorMetricType method) {
     switch (method) {
@@ -64,7 +173,7 @@ double Utils::getDefaultThreshold(QuadTree::ErrorMetricType method) {
 }
 
 int Utils::getDefaultMinBlockArea() {
-    return 16; // 4x4 pixels default minimum area
+    return 16; 
 }
 
 
