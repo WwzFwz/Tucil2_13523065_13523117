@@ -26,7 +26,7 @@ void Utils::getThresholdLimits(QuadTree::ErrorMetricType method, double& minThre
             break;
         case QuadTree::SSIM:
             minThreshold = 0.0;
-            maxThreshold = 0.9;
+            maxThreshold = 1;
             break;
         default:
             minThreshold = 0.0;

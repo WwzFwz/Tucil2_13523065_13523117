@@ -53,6 +53,12 @@ bool ImageProcessor::loadImage() {
         return false;
     }
     
+    if (minBlockSize > (width * height)) {
+        std::cerr << "Error: Minimum block area (" << minBlockSize << " square pixels) is larger than the image area (" 
+                  << (width * height) << " square pixels)." << std::endl;
+        stbi_image_free(data);  
+        return false;
+    }
     // Konversi data gambar ke format yang kita gunakan
     originalImage.resize(height);
     for (int y = 0; y < height; ++y) {
