@@ -71,7 +71,7 @@ quadtree_compression/
 After opening the terminal on the project 
 ### Alternative 1 - Running the existing executable file**
    ```bash
-      ./bin/quadtree_compression
+   ./bin/quadtree_compression
    ```
 ### Alternative 2 - Recompiling with make 
    ```bash
@@ -98,7 +98,7 @@ After opening the terminal on the project
 ### A. INTERACTIVE MODE (CLI)
    Run the program without parameters :
    ```bash
-      ./bin/quadtree_compression
+   ./bin/quadtree_compression
    ```
 ### B. COMMAND LINE MODE 
    ```bash
