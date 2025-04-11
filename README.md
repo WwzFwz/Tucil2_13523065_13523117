@@ -67,44 +67,44 @@ quadtree_compression/
    code Tucil2_13523065_13523117
    ```
 
-### How to Run
+## How to Run
 After opening the terminal on the project 
-## Alternative 1 - Running the existing executable file**
+### Alternative 1 - Running the existing executable file**
    ```bash
       ./bin/quadtree_compression
    ```
-## Alternative 2 - Recompiling with make 
+### Alternative 2 - Recompiling with make 
    ```bash
    make
    ```
    then you can run the new executable file as in Alternative 1
 
-## Alternative 3 - Running and recompiling with make
+### Alternative 3 - Running and recompiling with make
    ```bash
    make run
    ```
    note : alternative 3 using **interactive mode** (CLI input)
    
-## Alternative 4 - Recompiling with g++ in terminal 
+### Alternative 4 - Recompiling with g++ in terminal 
    ```bash
    g++ -std=c++14 -Wall -Wextra -I./src/include -I./lib  src/main.cpp src/Block.cpp src/Node.cpp src/RGB.cpp   src/QuadTree.cpp src/ErrorMetrics.cpp src/ImageProcessor.cpp src/Utils.cpp  -o quadtree_compression
    ```
    then you can run the new executable file as in Alternative 1
    
-### How to Use 
+## How to Use 
 **The program can be run in two modes:**
 -***Interactive Mode***: Without command line parameters
 -***Command Line Mode***: With command line parameters
-## A. INTERACTIVE MODE (CLI)
+### A. INTERACTIVE MODE (CLI)
    Run the program without parameters :
    ```bash
       ./bin/quadtree_compression
    ```
-## B. COMMAND LINE MODE 
+### B. COMMAND LINE MODE 
    ```bash
    ./bin/quadtree_compression [options]
    ```
-### Available options :
+#### Available options :
  - **-i, --input <file>**: Input image file path (REQUIRED)
  - **-o, --output <file>**: Output compressed image file path (if omitted, a default path will be generated)
  - **-m, --method <number>**: Error measurement method (1=Variance, 2=MAD, 3=MaxDiff, 4=Entropy, 5=SSIM) (default: 1)
@@ -114,7 +114,7 @@ After opening the terminal on the project
  - **-g, --gif <file>**: GIF visualization file path (if omitted, no GIF will be generated unless target compression is enabled)
  - **-h, --help**: Display help information
 
-### Default Behavior for Omitted Parameters
+#### Default Behavior for Omitted Parameters
 
  - If **output is not specified**, a **default path** will be generated based on the input filename and compression parameters
  - If **method is not specified, Variance (1)** will be used as the default method
@@ -123,7 +123,7 @@ After opening the terminal on the project
  - If **compression is not specified, adaptive compression mode** will be disabled (0.0)
  - If **gif is not specified** but **compression is set**, a **default GIF path will be generated**
 
-### Examples via command line mode
+#### Examples via command line mode
 ```bash
 ./bin/quadtree_compression -i "C:\Users\YourName\Pictures\sample.png" -o "C:\Users\YourName\Documents\output.png" -m 1 -t 20 -b 16
 ```
