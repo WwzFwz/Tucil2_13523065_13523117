@@ -27,7 +27,7 @@ A program that implements an image compression algorithm with the QuadTree metho
 
 ## Requirements
 - **C++ Compiler (g++) with C++14 support**
-- **Make (opstional)**
+- **Make (optional)**
 - **Operating System: Windows/Linux/MacOS**
 
 ## Structure
