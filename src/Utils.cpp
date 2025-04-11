@@ -13,12 +13,12 @@ void Utils::getThresholdLimits(QuadTree::ErrorMetricType method, double& minThre
             maxThreshold = 1000;
             break;
         case QuadTree::MEAN_ABSOLUTE_DEVIATION:
-            minThreshold = 0.0;
-            maxThreshold = 25;
+            minThreshold = 2;
+            maxThreshold = 50;
             break;
         case QuadTree::MAX_PIXEL_DIFFERENCE:
-            minThreshold = 0.0;
-            maxThreshold = 125;
+            minThreshold = 3;
+            maxThreshold = 225;
             break;
         case QuadTree::ENTROPY:
             minThreshold = 0.0;
