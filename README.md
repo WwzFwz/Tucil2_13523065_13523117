@@ -64,7 +64,7 @@ quadtree_compression/
    ```
 2. **Navigate to the src directory of the program by running the following command in the terminal:**
    ```bash
-   cd Tucil2_13523065_13523117
+   code Tucil2_13523065_13523117
    ```
 
 ### How to Run
