@@ -18,11 +18,11 @@
 A program that implements an image compression algorithm with the QuadTree method based on the divide and conquer approach.
 
 ## Features
--**QuadTree based image compression with divide and conquer method**
--**Choice of 5 different error measurement methods**
--**Adaptive compression mode with target compression percentage** [BONUS]
--**Visualization of compression process in GIF format** [BONUS]
--**Input via CLI mode or command args mode** [INNOVATION]
+ - **QuadTree based image compression with divide and conquer method**
+ - **Choice of 5 different error measurement methods**
+ - **Adaptive compression mode with target compression percentage** [BONUS]
+ - **Visualization of compression process in GIF format** [BONUS]
+ - **Input via CLI mode or command args mode** [INNOVATION]
 
 ## Requirements
 - **C++ Compiler (g++) with C++14 support**
