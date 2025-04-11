@@ -1,12 +1,11 @@
 # Direktori hasil kompilasi
-# /bin/
 /obj/
 /build/
 
 # File hasil kompilasi
 *.o
 *.obj
-*.exe
+
 *.out
 *.app
 *.dll
