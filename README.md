@@ -128,7 +128,7 @@ After opening the terminal on the project
 ```bash
 ./bin/quadtree_compression -i "C:\Users\YourName\Pictures\sample.png" -o "C:\Users\YourName\Documents\output.png" -m 1 -t 20 -b 16
 ```
-## ERROR MEASUREMENT METHODS
+## Error Measurement Methods
 ### 1.VARIANCE
  - Threshold range: 0.0 - 1000.0
  - Default: 20.0
