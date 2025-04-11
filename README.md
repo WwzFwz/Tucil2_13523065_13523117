@@ -150,6 +150,18 @@ After opening the terminal on the project
  - Default: 0.15
  - Perceptual metric that considers luminance, contrast and structure
 
+This project uses an external library for animated GIF generation:
+
+- **Library**: [`gif.h`](https://github.com/charlietangora/gif-h)  
+- **Author**: Charlie Tangora  
+- **License**: Public Domain  
+- **Usage in This Project**:  
+  The `gif.h` library is a lightweight, single-header C library used to generate animated GIFs frame by frame. In this project, it is used to record the visualization of the Quadtree compression process—showing how the image is progressively divided and simplified into blocks.
+
+  The file is included as-is in the `lib/` directory and integrated into the project without any substantial modifications. All usage complies with the Public Domain license.
+
+> This library is credited appropriately to acknowledge the original author and avoid plagiarism, in accordance with academic integrity guidelines.
+
 ## Contributors
 
 | **NIM**  | **Nama Anggota**               | **Github** |
