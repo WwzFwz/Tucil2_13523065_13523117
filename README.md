@@ -9,8 +9,8 @@
 - [Requirements](#requirements)
 - [Structure](#structure)
 - [Getting Started](#getting-started)
-- [How_To_Run](#how-ro-run)
-- [How_To_Use](#how-ro-use)
+- [How_To_Run](#how-to-run)
+- [How_To_Use](#how-to-use)
 - [Contributors](#contributors)
 - [References](#references)
 
