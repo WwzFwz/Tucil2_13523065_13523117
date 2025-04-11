@@ -70,7 +70,7 @@ quadtree_compression/
 
 ## How to Run
 After opening the terminal on the project 
-### Alternative 1 - Running the existing executable file**
+### Alternative 1 - Running the existing executable file
    ```bash
    ./bin/quadtree_compression
    ```
