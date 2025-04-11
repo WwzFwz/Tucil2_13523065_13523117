@@ -10,24 +10,27 @@ void Utils::getThresholdLimits(QuadTree::ErrorMetricType method, double& minThre
     switch(method) {
         case QuadTree::VARIANCE:
             minThreshold = 0.0;
-            maxThreshold = 65025.0;
+            maxThreshold = 1000;
             break;
         case QuadTree::MEAN_ABSOLUTE_DEVIATION:
+            minThreshold = 0.0;
+            maxThreshold = 25;
+            break;
         case QuadTree::MAX_PIXEL_DIFFERENCE:
             minThreshold = 0.0;
-            maxThreshold = 255.0;
+            maxThreshold = 125;
             break;
         case QuadTree::ENTROPY:
             minThreshold = 0.0;
-            maxThreshold = 8.0;
+            maxThreshold = 6;
             break;
         case QuadTree::SSIM:
             minThreshold = 0.0;
-            maxThreshold = 1.0;
+            maxThreshold = 0.9;
             break;
         default:
             minThreshold = 0.0;
-            maxThreshold = 255.0;
+            maxThreshold = 1000;
     }
 }
 std::string Utils::getDefaultGifPath(const std::string& inputPath, 
@@ -105,7 +108,7 @@ std::string Utils::getDefaultOutputPath(const std::string& inputPath,
     }
     }
 
-    // Build new filename
+    
     std::stringstream ss;
     if (percentageCompression > 0.0) {
     ss << baseName << "_percentage_" << percentageCompression;
