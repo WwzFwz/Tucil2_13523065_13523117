@@ -1,21 +1,21 @@
 #include "Node.hpp"
 
-// Constructor
+
 Node::Node(const Block& _region, const RGB& _avgColor, bool _isLeaf)
     : region(_region), avgColor(_avgColor), isLeaf(_isLeaf),
       topLeft(nullptr), topRight(nullptr), bottomLeft(nullptr), bottomRight(nullptr) {}
 
-// Getter untuk region
+
 const Block& Node::getRegion() const {
     return region;
 }
 
-// Getter untuk warna rata-rata
+
 const RGB& Node::getAvgColor() const {
     return avgColor;
 }
 
-// Getter untuk memeriksa apakah node adalah leaf
+
 bool Node::getIsLeaf() const {
     return isLeaf;
 }
