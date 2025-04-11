@@ -88,7 +88,7 @@ After opening the terminal on the project
    
 ### Alternative 4 - Recompiling with g++ in terminal 
    ```bash
-   g++ -std=c++14 -Wall -Wextra -I./src/include -I./lib  src/main.cpp src/Block.cpp src/Node.cpp src/RGB.cpp   src/QuadTree.cpp src/ErrorMetrics.cpp src/ImageProcessor.cpp src/Utils.cpp  -o quadtree_compression
+   g++ -std=c++14 -Wall -Wextra -I./src/include -I./lib  src/main.cpp src/Block.cpp src/Node.cpp src/RGB.cpp   src/QuadTree.cpp src/ErrorMetrics.cpp src/ImageProcessor.cpp src/Utils.cpp  -o ./bin/quadtree_compression
    ```
    then you can run the new executable file as in Alternative 1
    
