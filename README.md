@@ -11,6 +11,7 @@
 - [Getting Started](#getting-started)
 - [How_To_Run](#how-to-run)
 - [How_To_Use](#how-to-use)
+- [Error_Measurement_Methods](#error-measurement-methods)
 - [Contributors](#contributors)
 - [References](#references)
 
@@ -127,7 +128,28 @@ After opening the terminal on the project
 ```bash
 ./bin/quadtree_compression -i "C:\Users\YourName\Pictures\sample.png" -o "C:\Users\YourName\Documents\output.png" -m 1 -t 20 -b 16
 ```
-   
+## ERROR MEASUREMENT METHODS
+### 1.VARIANCE
+ - Threshold range: 0.0 - 1000.0
+ - Default: 20.0
+ - Higher values allow more compression but lower quality
+### 2.Mean Absolute Deviation (MAD)
+ - Threshold range: 2.0 - 50.0
+ - Default: 15.0
+ - Measures average color deviation within blocks
+### 3.Max Pixel Difference
+ - Threshold range: 3.0 - 225.0
+ - Default: 50.0
+ - Based on maximum color difference between pixels
+### 4.Entropy
+ - Threshold range: 0.0 - 6.0
+ - Default: 0.5
+ - Measures information content/complexity of image regions
+### 5.SSIM (Structural Similarity Index) [BONUS]
+ - Threshold range: 0.0 - 0.9
+ - Default: 0.15
+ - Perceptual metric that considers luminance, contrast and structure
+
 ## Contributors
 
 | **NIM**  | **Nama Anggota**               | **Github** |
