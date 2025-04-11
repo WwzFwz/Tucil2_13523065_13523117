@@ -6,21 +6,23 @@
 
 - [Description](#description)
 - [Features](#features)
-- [Tech Stack](#tech-stack)
+- [Requirements](#requirements)
 - [Structure](#structure)
 - [Getting Started](#getting-started)
+- [How_To_Run](#how-ro-run)
+- [How_To_Use](#how-ro-use)
 - [Contributors](#contributors)
 - [References](#references)
 
 ## Description
-Program sederhana yang mengimplementasikan algoritma kompresi gambar dengan metode QuadTree berbasis pendekatan divide and conquer.
+A program that implements an image compression algorithm with the QuadTree method based on the divide and conquer approach.
 
 ## Features
--**Kompresi gambar berbasis QuadTree dengan metode divide and conquer**
--**Pilihan 5 metode pengukuran error yang berbeda**
--**Mode kompresi adaptif dengan target persentase kompresi **
--**Visualisasi proses kompresi dalam format GIF**
--**Input melalui mode CLI atau mode command args"
+-**QuadTree based image compression with divide and conquer method**
+-**Choice of 5 different error measurement methods**
+-**Adaptive compression mode with target compression percentage** [BONUS]
+-**Visualization of compression process in GIF format** [BONUS]
+-**Input via CLI mode or command args mode** [INNOVATION]
 
 ## Requirements
 - **C++ Compiler (g++) with C++14 support**
@@ -65,7 +67,7 @@ quadtree_compression/
    cd Tucil2_13523065_13523117
    ```
 
-### How to Compile
+### How to Run
 After opening the terminal on the project 
 ## Alternative 1 - Running the existing executable file**
    ```bash
@@ -89,7 +91,7 @@ After opening the terminal on the project
    ```
    then you can run the new executable file as in Alternative 1
    
-### How to Run
+### How to Use 
 **The program can be run in two modes:**
 -***Interactive Mode***: Without command line parameters
 -***Command Line Mode***: With command line parameters
@@ -102,27 +104,30 @@ After opening the terminal on the project
    ```bash
    ./bin/quadtree_compression [options]
    ```
-###**Available optionns** :
-Available options:
-**-i, --input <file>**: Input image file path (REQUIRED)
-**-o, --output <file>**: Output compressed image file path (if omitted, a default path will be generated)
-**-m, --method <number>**: Error measurement method (1=Variance, 2=MAD, 3=MaxDiff, 4=Entropy, 5=SSIM) (default: 1)
-**-t, --threshold <number>**: Error threshold (if omitted, a default value based on the method will be used)
-**-b, --blocksize <number>**: Minimum block size in square pixels (default: 16)
-**-c, --compression <percent>**: Target compression percentage (0.0-1.0, 0 to disable) (default: 0)
-**-g, --gif <file>**: GIF visualization file path (if omitted, no GIF will be generated unless target compression is enabled)
-**-h, --help**: Display help information
+### Available options :
+ - **-i, --input <file>**: Input image file path (REQUIRED)
+ - **-o, --output <file>**: Output compressed image file path (if omitted, a default path will be generated)
+ - **-m, --method <number>**: Error measurement method (1=Variance, 2=MAD, 3=MaxDiff, 4=Entropy, 5=SSIM) (default: 1)
+ - **-t, --threshold <number>**: Error threshold (if omitted, a default value based on the method will be used)
+ - **-b, --blocksize <number>**: Minimum block size in square pixels (default: 16)
+ - **-c, --compression <percent>**: Target compression percentage (0.0-1.0, 0 to disable) (default: 0)
+ - **-g, --gif <file>**: GIF visualization file path (if omitted, no GIF will be generated unless target compression is enabled)
+ - **-h, --help**: Display help information
 
-###**Default Behavior for Omitted Parameters**
+### Default Behavior for Omitted Parameters
 
-If **output is not specified**, a **default path** will be generated based on the input filename and compression parameters
-If **method is not specified, Variance (1)** will be used as the default method
-If **threshold is not specified**, a **default value** will be used based on the selected method
-If **blocksize is not specified**, **16 square pixels** will be used as the default
-If **compression is not specified, adaptive compression mode** will be disabled (0.0)
-If **gif is not specified** but **compression is set**, a **default GIF path will be generated**
-## Possible Error
+ - If **output is not specified**, a **default path** will be generated based on the input filename and compression parameters
+ - If **method is not specified, Variance (1)** will be used as the default method
+ - If **threshold is not specified**, a **default value** will be used based on the selected method
+ - If **blocksize is not specified**, **16 square pixels** will be used as the default
+ - If **compression is not specified, adaptive compression mode** will be disabled (0.0)
+ - If **gif is not specified** but **compression is set**, a **default GIF path will be generated**
 
+### Examples via command line mode
+```bash
+./bin/quadtree_compression -i "C:\Users\YourName\Pictures\sample.png" -o "C:\Users\YourName\Documents\output.png" -m 1 -t 20 -b 16
+```
+   
 ## Contributors
 
 | **NIM**  | **Nama Anggota**               | **Github** |
