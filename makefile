@@ -1,10 +1,9 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -Wextra -I./src/include -I./lib
-LDFLAGS = -lstdc++fs
+# LDFLAGS = -lstdc++fs
 SRC_DIR = src
 BIN_DIR = bin
 
-# Kompilasi langsung tanpa file objek terpisah
 all:
 	mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -o $(BIN_DIR)/quadtree_compression \
@@ -16,9 +15,12 @@ all:
 	$(SRC_DIR)/ErrorMetrics.cpp \
 	$(SRC_DIR)/ImageProcessor.cpp \
 	$(SRC_DIR)/Utils.cpp \
-	$(LDFLAGS)
+
+
+run: all
+	./$(BIN_DIR)/quadtree_compression
 
 clean:
 	rm -f $(BIN_DIR)/quadtree_compression
 
-.PHONY: all clean
+.PHONY: all clean run

@@ -41,4 +41,4 @@ namespace Utils {
         double percentageCompression = 0.0);
 }
 
-#endif // UTILS_HPP
+#endif 

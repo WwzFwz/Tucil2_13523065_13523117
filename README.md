@@ -13,7 +13,7 @@
 - [References](#references)
 
 ## Description
-
+Program sederhana yang mengimplementasikan algoritma kompresi gambar dengan metode QuadTree berbasis pendekatan divide and conquer.
 
 ## Features
 

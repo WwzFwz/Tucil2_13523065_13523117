@@ -258,7 +258,7 @@ size_t ImageProcessor::getCompressedSize() const {
 double ImageProcessor::findThresholdForTargetCompression() {
     // Inisialisasi nilai batas atas dan bawah untuk binary search
     double lowerBound = 0.1;    // Nilai minimum threshold yang masuk akal
-    double upperBound = 1000.0; // Nilai maksimum threshold yang masuk akal
+    double upperBound = 1000.0; 
     double currentThreshold;    // Threshold yang akan dicoba pada iterasi ini
     
     // Parameter tambahan untuk mengontrol algoritma
@@ -297,21 +297,17 @@ double ImageProcessor::findThresholdForTargetCompression() {
             bestDifference = difference;
             bestThreshold = currentThreshold;
         }
-        
-        // Periksa apakah sudah cukup dekat dengan target
+    
         if (difference <= tolerance) {
             std::cout << "Target achieved within tolerance!" << std::endl;
             return currentThreshold;
         }
         
-        // Sesuaikan range pencarian berdasarkan hasil
+
         if (achievedCompression < targetCompressionPercentage) {
-            // Jika kompresi kurang dari target (perlu lebih banyak kompresi)
-            // Artinya kita perlu threshold yang lebih tinggi
+
             lowerBound = currentThreshold;
         } else {
-            // Jika kompresi lebih dari target (terlalu banyak kompresi)
-            // Artinya kita perlu threshold yang lebih rendah
             upperBound = currentThreshold;
         }
         
@@ -321,20 +317,20 @@ double ImageProcessor::findThresholdForTargetCompression() {
     std::cout << "Search completed. Best threshold = " << bestThreshold 
               << " (difference = " << (bestDifference * 100) << "%)" << std::endl;
     
-    // Kembalikan threshold terbaik yang ditemukan
+ 
     return bestThreshold;
 }
 
-// Membuat GIF visualisasi proses kompresi
+
 bool ImageProcessor::generateCompressionGif() {
     try {
-        // Buat direktori output jika belum ada
+      
         std::string directory = gifPath.substr(0, gifPath.find_last_of("/\\"));
         if (!directory.empty()) {
             Utils::createDirectoryIfNotExists(directory);
         }
 
-        // Inisialisasi writer
+
         GifWriter gifWriter;
         if (!GifBegin(&gifWriter, gifPath.c_str(), width, height, 10)) {
             std::cerr << "Failed to initialize GIF writer\n";
@@ -343,23 +339,23 @@ bool ImageProcessor::generateCompressionGif() {
 
         std::cout << "Generating GIF (streaming)...\n";
 
-        // Buffer gambar yang dimodifikasi secara bertahap
+   
         std::vector<std::vector<RGB>> gifBuffer = originalImage;
 
-        // Counter frame
+   
         int frameCounter = 0;
-        const int frameInterval = 100;  // lebih sering, biar kelihatan animasinya
+        const int frameInterval = 100;  
 
-        // Callback yang diberikan ke QuadTree
+
         auto callback = [&](const Block& region, const RGB& avgColor) {
-            // Modifikasi region sesuai warna kompresi
+    
             for (int y = region.getY(); y < region.getY() + region.getHeight(); ++y) {
                 for (int x = region.getX(); x < region.getX() + region.getWidth(); ++x) {
                     gifBuffer[y][x] = avgColor;
                 }
             }
 
-            // Setiap interval, kita tulis frame ke GIF
+        
             if (frameCounter % frameInterval == 0) {
                 std::vector<uint8_t> frameData(width * height * 4);
                 for (int y = 0; y < height; ++y) {
@@ -383,12 +379,11 @@ bool ImageProcessor::generateCompressionGif() {
 
         };
 
-        // Bangun Quadtree baru dengan callback streaming
         QuadTree treeCopy(originalImage, minBlockSize, threshold, errorMetricType);
-        treeCopy.setCompressionRegionCallback(callback);  // Pastikan ini sudah kamu buat
+        treeCopy.setCompressionRegionCallback(callback);  
         treeCopy.buildTree();
 
-        // Tambahkan frame terakhir (hasil akhir)
+            
         std::vector<uint8_t> finalFrame(width * height * 4);
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
@@ -413,7 +408,7 @@ bool ImageProcessor::generateCompressionGif() {
     }
 }
 
-// Menghitung ukuran file gambar
+
 size_t ImageProcessor::calculateImageSize(const vector<vector<RGB>>& img) const {
     if (img.empty() || img[0].empty()) {
         return 0;

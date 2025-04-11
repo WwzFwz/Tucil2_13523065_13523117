@@ -4,7 +4,7 @@
 #include "ImageProcessor.hpp"
 #include "Utils.hpp"
 
-// ANSI color codes for terminal coloring
+
 #define RESET   "\033[0m"
 #define RED     "\033[31m"
 #define GREEN   "\033[32m"
@@ -38,18 +38,18 @@ QuadTree::ErrorMetricType getErrorMetricFromString(const std::string& input) {
     if (input == "4") return QuadTree::ENTROPY;
     if (input == "5") return QuadTree::SSIM;
     
-    return QuadTree::VARIANCE; // Default
+    return QuadTree::VARIANCE; 
 }
 
 int main(int argc, char* argv[]) {
     std::string inputPath, outputPath, gifPath;
     QuadTree::ErrorMetricType errorMethod = QuadTree::VARIANCE;
-    double threshold = -1.0; // -1 means use default based on method
+    double threshold = -1.0; 
     int minBlockSize = Utils::getDefaultMinBlockArea();
     double targetCompression = 0.0;
     bool interactiveMode = (argc <= 1);
     
-    // Parse command line arguments if provided
+    
     if (!interactiveMode) {
         for (int i = 1; i < argc; i++) {
             std::string arg = argv[i];
@@ -74,53 +74,52 @@ int main(int argc, char* argv[]) {
             }
         }
         
-        // Check if required arguments are provided
+
         if (inputPath.empty()) {
             std::cerr << "Error: Input path is required.\n";
             displayUsage(argv[0]);
             return 1;
         }
-        
-        // Check if input file exists
+
         if (!Utils::fileExists(inputPath)) {
             std::cerr << "Error: Input file '" << inputPath << "' does not exist.\n";
             return 1;
         }
         
-        // Use default output path if not specified
+        
         if (outputPath.empty()) {
             outputPath = Utils::getDefaultOutputPath(inputPath, errorMethod, 
                                                    threshold, minBlockSize, targetCompression);
             std::cout << "Using default output path: " << outputPath << std::endl;
         }
         
-        // Use default gif path if not specified but target compression enabled
+        
         if (gifPath.empty() && targetCompression > 0.0) {
             gifPath = Utils::getDefaultGifPath(inputPath, errorMethod, 
                                              threshold, minBlockSize, targetCompression);
             std::cout << "Using default GIF path: " << gifPath << std::endl;
         }
         
-        // Use default threshold if not specified
+ 
         if (threshold < 0) {
             threshold = Utils::getDefaultThreshold(errorMethod);
             std::cout << "Using default threshold: " << threshold << std::endl;
         }
     } else {
-        // Interactive mode with colored prompts
+      
         printColoredText("\n=== QuadTree Image Compression ===\n\n", BLUE);
         
-        // Input file
+      
         printColoredText("Enter input image path: ", GREEN);
         std::getline(std::cin, inputPath);
         
-        // Check if file exists
+        
         if (!Utils::fileExists(inputPath)) {
             printColoredText("Error: Input file does not exist. Please check the path and try again.\n", RED);
             return 1;
         }
         
-        // Output file
+       
         printColoredText("Enter output image path (leave empty for default): ", GREEN);
         std::getline(std::cin, outputPath);
 
@@ -136,7 +135,7 @@ int main(int argc, char* argv[]) {
         do {
             std::getline(std::cin, methodStr);
             if (methodStr.empty()) {
-                errorMethod = QuadTree::VARIANCE; // Default
+                errorMethod = QuadTree::VARIANCE; 
                 validMethod = true;
             } else {
                 try {
@@ -153,12 +152,12 @@ int main(int argc, char* argv[]) {
             }
         } while (!validMethod);
         
-        // Get default threshold and limits based on selected method
+     
         double defaultThreshold = Utils::getDefaultThreshold(errorMethod);
         double minThreshold, maxThreshold;
         Utils::getThresholdLimits(errorMethod, minThreshold, maxThreshold);
         
-        // Threshold with validation
+        
         printColoredText("\nEnter error threshold (" + std::to_string(minThreshold) + 
                         " to " + std::to_string(maxThreshold) + 
                         ") [default: " + std::to_string(defaultThreshold) + "]: ", GREEN);
@@ -184,37 +183,37 @@ int main(int argc, char* argv[]) {
             }
         } while (!validThreshold);
         
-        // Minimum block size
+    
         printColoredText("Enter minimum block area in square pixels [default: " + 
                          std::to_string(Utils::getDefaultMinBlockArea()) + "]: ", GREEN);
         std::string blockSizeStr;
         std::getline(std::cin, blockSizeStr);
         if (!blockSizeStr.empty()) minBlockSize = std::stoi(blockSizeStr);
         
-        // Target compression
+     
         printColoredText("\nEnter target compression percentage (0.0-1.0, 0 to disable): ", GREEN);
         std::string compressionStr;
         std::getline(std::cin, compressionStr);
         if (!compressionStr.empty()) targetCompression = std::stod(compressionStr);
         
-        // Set default output path if not specified
+        
         if (outputPath.empty()) {
             outputPath = Utils::getDefaultOutputPath(inputPath, errorMethod, 
                                                    threshold, minBlockSize, targetCompression);
             printColoredText("Using default output path: " + outputPath + "\n", CYAN);
         }
         
-        // GIF path
+
         printColoredText("Enter GIF visualization path (leave empty for default or 'n' to skip): ", GREEN);
         std::getline(std::cin, gifPath);
         
         if (gifPath.empty() && targetCompression > 0.0) {
-            // Provide default GIF path for target compression
+         
             gifPath = Utils::getDefaultGifPath(inputPath, errorMethod, 
                                              threshold, minBlockSize, targetCompression);
             printColoredText("Using default GIF path: " + gifPath + "\n", CYAN);
         } else if (gifPath == "n" || gifPath == "N") {
-            // User explicitly opted out of GIF
+      
             gifPath = "";
         }
         
@@ -232,11 +231,11 @@ int main(int argc, char* argv[]) {
         std::cout << "\n";
     }
     
-    // Process the image
+
     ImageProcessor processor(inputPath, outputPath, minBlockSize, threshold, 
                            errorMethod, targetCompression, gifPath);
     
-    // Print progress message
+
     printColoredText("Loading image...\n", YELLOW);
     bool success = processor.loadImage();
     if (!success) {
@@ -258,7 +257,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    // Display compression metrics
+
     processor.displayMetrics();
     
     if (interactiveMode) {

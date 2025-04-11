@@ -2,11 +2,9 @@
 #include "Utils.hpp"
 #include <iostream>
 #include <fstream>
-#include <experimental/filesystem>
 #include <string>
 #include <sstream>
 
-namespace fs = std::experimental::filesystem;
 
 void Utils::getThresholdLimits(QuadTree::ErrorMetricType method, double& minThreshold, double& maxThreshold) {
     switch(method) {
@@ -37,7 +35,6 @@ std::string Utils::getDefaultGifPath(const std::string& inputPath,
     double threshold, 
     int minBlockSize,
     double percentageCompression) {
-    // Extract directory, filename, and extension
     size_t lastSlash = inputPath.find_last_of("/\\");
     std::string directory = (lastSlash != std::string::npos) ? 
     inputPath.substr(0, lastSlash + 1) : "";
@@ -49,22 +46,17 @@ std::string Utils::getDefaultGifPath(const std::string& inputPath,
     std::string baseName = (lastDot != std::string::npos) ? 
     filename.substr(0, lastDot) : filename;
 
-    // Create gif directory (could be a subdirectory of output)
     std::string gifDir;
 
-    // If directory has "input" in the path, replace with "output/gif"
     size_t inputPos = directory.find("input");
     if (inputPos != std::string::npos) {
     gifDir = directory.substr(0, inputPos) + "output/gif/";
     } else {
-    // Otherwise, just use a subfolder "output/gif" under the current directory
     gifDir = directory + "output/gif/";
     }
 
-    // Ensure gif directory exists
     createDirectoryIfNotExists(gifDir);
 
-    // Build new filename with .gif extension
     std::stringstream ss;
     if (percentageCompression > 0.0) {
     ss << baseName << "_percentage_" << percentageCompression;
@@ -82,7 +74,7 @@ std::string Utils::getDefaultOutputPath(const std::string& inputPath,
     double threshold, 
     int minBlockSize,
     double percentageCompression) {
-    // Extract directory, filename, and extension
+
     size_t lastSlash = inputPath.find_last_of("/\\");
     std::string directory = (lastSlash != std::string::npos) ? 
     inputPath.substr(0, lastSlash + 1) : "";
@@ -97,19 +89,18 @@ std::string Utils::getDefaultOutputPath(const std::string& inputPath,
     std::string extension = (lastDot != std::string::npos) ? 
     filename.substr(lastDot) : "";
 
-    // Create path to output directory
-    // Replace "input" with "output" in the directory path if possible
+
     std::string outputDirectory = directory;
     size_t inputPos = outputDirectory.find("input");
     if (inputPos != std::string::npos) {
     outputDirectory.replace(inputPos, 5, "output");
     } else {
-    // If "input" not found, try to create an "output" directory at the same level
+
     size_t lastDirSlash = outputDirectory.substr(0, outputDirectory.length() - 1).find_last_of("/\\");
     if (lastDirSlash != std::string::npos) {
     outputDirectory = outputDirectory.substr(0, lastDirSlash + 1) + "output/";
     } else {
-    // If all else fails, just use the same directory
+
     outputDirectory = directory;
     }
     }
@@ -179,18 +170,16 @@ int Utils::getDefaultMinBlockArea() {
 
 bool Utils::createDirectoryIfNotExists(const std::string& dirPath) {
     if (dirPath.empty()) {
-        return true; // No directory to create
+        return true; 
     }
-    
-    // Create each directory in the path
+
     std::string path = "";
     size_t pos = 0;
     
-    // Handle absolute paths
     if (dirPath[0] == '/' || (dirPath.size() > 1 && dirPath[1] == ':')) {
         path = dirPath[0];
         if (dirPath.size() > 1 && dirPath[1] == ':') {
-            path = dirPath.substr(0, 2); // Include drive letter on Windows
+            path = dirPath.substr(0, 2); 
             pos = 2;
         } else {
             pos = 1;
@@ -205,12 +194,11 @@ bool Utils::createDirectoryIfNotExists(const std::string& dirPath) {
         
         path += dirPath.substr(pos, nextPos - pos);
         
-        // Try to create this directory segment if it doesn't exist
+
         if (!path.empty()) {
             #ifdef _WIN32
             int result = _mkdir(path.c_str());
             if (result != 0 && errno != EEXIST) {
-                // Only report error if it's not because directory already exists
                 if (errno != EEXIST) {
                     std::cerr << "Error creating directory " << path << std::endl;
                     return false;
@@ -226,7 +214,7 @@ bool Utils::createDirectoryIfNotExists(const std::string& dirPath) {
         }
         
         if (nextPos < dirPath.size()) {
-            path += dirPath[nextPos]; // Add the separator
+            path += dirPath[nextPos]; 
         }
         pos = nextPos + 1;
     }
