@@ -4,7 +4,7 @@
 #include <vector>
 #include "RGB.hpp"
 #include "Block.hpp"
-// Tambahkan di awal file setelah include
+
 using namespace std;
 
 /**
