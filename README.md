@@ -1,5 +1,5 @@
 <h1 align="center">Tugas Kecil 2 IF2211 Strategi Algoritma</h1>
-<h3 align="center">Kompresi Gambar dengan Metode Quadtree</h3>
+<h3 align="center">Image Compression with Quadtree Method</h3>
 
 
 ## Table of Contents
