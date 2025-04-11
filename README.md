@@ -96,12 +96,12 @@ After opening the terminal on the project
 **The program can be run in two modes:**
 -***Interactive Mode***: Without command line parameters
 -***Command Line Mode***: With command line parameters
-### A. INTERACTIVE MODE (CLI)
+### A. Interactive Mode (CLI)
    Run the program without parameters :
    ```bash
    ./bin/quadtree_compression
    ```
-### B. COMMAND LINE MODE 
+### B. Command Line Mode
    ```bash
    ./bin/quadtree_compression [options]
    ```
